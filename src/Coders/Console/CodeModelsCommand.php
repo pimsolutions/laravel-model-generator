@@ -86,7 +86,16 @@ class CodeModelsCommand extends Command
      */
     protected function getSchema($connection)
     {
-        return $this->option('schema') ?: $this->config->get("database.connections.$connection.database");
+        $defaultSchemaConfigPath = "database.connections.$connection.default_schema";
+
+        $schema = $this->option('schema') ?: $this->config->get($defaultSchemaConfigPath);
+
+        if (!$schema)
+        {
+            throw new \RuntimeException("Specify schema exactly or set config value '$defaultSchemaConfigPath'.");
+        }
+
+        return $schema;
     }
 
     /**

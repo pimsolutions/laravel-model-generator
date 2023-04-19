@@ -79,11 +79,15 @@ class Schema implements \Reliese\Meta\Schema
      *
      * @return array
      */
-    protected function fetchTables()
+    protected function fetchTables(string $schema)
     {
+
+
         $rows = $this->arraify($this->connection->select(
-            'SELECT * FROM pg_tables where schemaname=\'public\''
+            'SELECT * FROM pg_tables WHERE schemaname = :schema',
+            ['schema' => $schema]
         ));
+
         $names = array_column($rows, 'tablename');
 
         return Arr::flatten($names);
@@ -273,13 +277,7 @@ class Schema implements \Reliese\Meta\Schema
      */
     public static function schemas(Connection $connection)
     {
-        $schemas = $connection->getDoctrineSchemaManager()->listDatabases();
-
-        return array_diff($schemas, [
-            'postgres',
-            'template0',
-            'template1',
-        ]);
+        return $connection->getDoctrineSchemaManager()->listSchemaNames();
     }
 
     /**
