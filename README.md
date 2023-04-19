@@ -1,9 +1,4 @@
 # Reliese Laravel Model Generator
-[![Build Status](https://travis-ci.org/reliese/laravel.svg?branch=master)](https://travis-ci.org/reliese/laravel)
-[![Latest Stable Version](https://poser.pugx.org/reliese/laravel/v/stable)](https://packagist.org/packages/reliese/laravel)
-[![Total Downloads](https://poser.pugx.org/reliese/laravel/downloads)](https://packagist.org/packages/reliese/laravel)
-[![Latest Unstable Version](https://poser.pugx.org/reliese/laravel/v/unstable)](https://packagist.org/packages/reliese/laravel)
-[![License](https://poser.pugx.org/reliese/laravel/license)](https://packagist.org/packages/reliese/laravel)
 
 Reliese Laravel Model Generator aims to speed up the development process of Laravel applications by 
 providing some convenient code-generation capabilities. 
@@ -13,14 +8,14 @@ to automatically generate Models that have correctly typed properties, along wit
 ## How does it work?
 
 This package expects that you are using Laravel 5.1 or above.
-You will need to import the `reliese/laravel` package via composer:
+You will need to import the `pimsolutions/laravel-model-generator` package via composer:
 
 ### Configuration
 
 It is recommended that this package should only be used on a local environment for security reasons. You should install it via composer using the --dev option like this:
 
 ```shell
-composer require reliese/laravel --dev
+composer require pimsolutions/laravel-model-generator --dev
 ```
 
 Add the `models.php` configuration file to your `config` directory and clear the config cache:
@@ -67,7 +62,7 @@ php artisan code:models --schema=shop
 ### Customizing Model Scaffolding
 
 To change the scaffolding behaviour you can make `config/models.php` configuration file
-fit your database needs. [Check it out](https://github.com/reliese/laravel/blob/master/config/models.php) ;-)
+fit your database needs. [Check it out](https://github.com/pimsolutions/laravel-model-generator/blob/master/config/models.php) ;-)
 
 ### Tips
 
