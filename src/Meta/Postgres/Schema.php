@@ -82,7 +82,6 @@ class Schema implements \Reliese\Meta\Schema
     protected function fetchTables(string $schema)
     {
 
-
         $rows = $this->arraify($this->connection->select(
             'SELECT * FROM pg_tables WHERE schemaname = :schema',
             ['schema' => $schema]
@@ -132,6 +131,7 @@ class Schema implements \Reliese\Meta\Schema
         $sql = '
         SELECT child.attname, p.contype, p.conname,
             parent_class.relname as parent_table,
+            parent_ns.nspname as parent_schema,
             parent.attname as parent_attname
         FROM pg_attribute child
             JOIN pg_class child_class ON child_class.oid = child.attrelid
@@ -140,6 +140,7 @@ class Schema implements \Reliese\Meta\Schema
             LEFT JOIN pg_attribute parent on parent.attnum = ANY (p.confkey)
                 AND parent.attrelid = p.confrelid
             LEFT JOIN pg_class parent_class on parent_class.oid = p.confrelid
+            LEFT JOIN pg_namespace AS parent_ns ON parent_ns.oid = parent_class.relnamespace
         WHERE child_class.relkind = \'r\'::char
             AND child_class.relname = \''.$blueprint->table().'\'
             AND child.attnum > 0
@@ -232,6 +233,7 @@ class Schema implements \Reliese\Meta\Schema
                 $fk[$relName]['columns'][] = $row['attname'];
                 $fk[$relName]['ref'][] = $row['parent_attname'];
                 $fk[$relName]['table'] = $row['parent_table'];
+                $fk[$relName]['schema'] = $row['parent_schema'];
             }
         }
 
@@ -241,7 +243,7 @@ class Schema implements \Reliese\Meta\Schema
                 'index' => '',
                 'columns' => $row['columns'],
                 'references' => $row['ref'],
-                'on' => [$this->schema, $row['table']],
+                'on' => [$row['schema'], $row['table']],
             ];
 
             $blueprint->withRelation(new Fluent($relation));
